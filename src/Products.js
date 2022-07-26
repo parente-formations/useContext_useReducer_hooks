@@ -1,7 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { shopData } from "./ShopData";
-import ProductCard from "./ProductCard";
+import { shopData } from './ShopData';
+import ProductCard from './ProductCard';
+
+// TODO: faire de products a container
 
 const Products = () => {
   return (
@@ -25,7 +27,7 @@ const Title = styled.p`
   margin-top: 20px;
 `;
 
-const ProductsWrapper = styled.div`
+export const ProductsWrapper = styled.div`
   width: fit-content;
   display: grid;
   grid-template-columns: repeat(2, auto);

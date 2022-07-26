@@ -1,10 +1,28 @@
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useShop } from './context/ShopContext';
 
 const ProductCard = ({ name, imageUrl, price }) => {
+  console.log('[Rendering] ProductCard...');
+
+  const { products, addToCart, removeFromCart } = useShop();
+  const [isInCart, setIsInCart] = useState(false);
+
+  useEffect(() => {
+    const isProductInCart = products.find((product) => product.name === name);
+    isProductInCart ? setIsInCart(true) : setIsInCart(false);
+  }, [products, name]);
+
+  const handleClick = () => {
+    const product = { name, imageUrl, price };
+
+    isInCart ? removeFromCart(product) : addToCart(product);
+  };
+
   return (
     <Wrapper background={imageUrl}>
-      <AddButton onClick={() => console.log(`Added ${name} to cart`)}>
-        <p>+</p>
+      <AddButton isInCart={isInCart} onClick={handleClick}>
+        <p>{isInCart ? '-' : '+'}</p>
       </AddButton>
       <TextContainer>
         <Title>{name}</Title>
@@ -24,8 +42,8 @@ const Wrapper = styled.div`
   border-radius: 20px;
   box-shadow: 0px 20px 40px rgba(52, 53, 99, 0.2),
     0px 1px 3px rgba(0, 0, 0, 0.05);
-  background: ${(props) =>
-    props.background && `url(${props.background}) center no-repeat`};
+  background: ${({ background }) =>
+    background && `url(${background}) center no-repeat`};
   background-size: 300px;
   overflow: hidden;
   position: relative;
@@ -40,14 +58,14 @@ const AddButton = styled.div`
   right: 20px;
   width: 20px;
   height: 20px;
-  background: #60c95d;
+  background: ${({ isInCart }) => (isInCart ? '#E55336' : '#60c95d')};
   border-radius: 50%;
   padding: 5px;
   cursor: pointer;
 
   :hover {
     transform: scale(1.2);
-    transition: 1s;
+    transition: 0.5s;
   }
 
   p {
